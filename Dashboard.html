@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Arial;background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh}
+        .dash{
+            background:white;
+            width:500px;
+            padding:40px;
+            border-radius:14px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.1);
+            text-align:center;
+        }
+        h1{color:#15803d;margin-bottom:20px}
+        .info{text-align:left;margin-top:20px;background:#f0fdf4;padding:20px;border-radius:10px}
+        .info p{margin-bottom:10px;font-size:18px}
+        .info strong{color:#0f172a}
+        button{
+            margin-top:25px;width:100%;padding:12px;
+            background:#e11d48;color:white;border:none;
+            border-radius:8px;font-size:16px;cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dash">
+        <h1>Welcome to Dashboard 🎉</h1>
+        <p id="welcomeMsg">Loading...</p>
+        <div class="info" id="studentInfo"></div>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        
+        let data = localStorage.getItem('student');
+        
+        if(!data){
+            
+            alert("Please register first!");
+            window.location.href = "register.html";
+        } else {
+            let student = JSON.parse(data);
+            document.getElementById('welcomeMsg').innerHTML = `Hello, <strong>${student.name}</strong>!`;
+            document.getElementById('studentInfo').innerHTML = `
+                <p><strong>Reg No:</strong> ${student.regNo}</p>
+                <p><strong>Email:</strong> ${student.email}</p>
+                <p><strong>Course:</strong> ${student.course}</p>
+                <p><strong>Year:</strong> ${student.year}</p>
+            `;
+        }
+
+        function logout(){
+            localStorage.removeItem('student');
+            window.location.href = "register.html";
+        }
+    </script>
+</body>
+</html>
