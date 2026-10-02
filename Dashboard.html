@@ -3,59 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:Arial;background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh}
-        .dash{
-            background:white;
-            width:500px;
-            padding:40px;
-            border-radius:14px;
-            box-shadow:0 4px 20px rgba(0,0,0,0.1);
-            text-align:center;
+        body {
+            background: #f0f2f5;
+            display: block;
+            padding: 0;
         }
-        h1{color:#15803d;margin-bottom:20px}
-        .info{text-align:left;margin-top:20px;background:#f0fdf4;padding:20px;border-radius:10px}
-        .info p{margin-bottom:10px;font-size:18px}
-        .info strong{color:#0f172a}
-        button{
-            margin-top:25px;width:100%;padding:12px;
-            background:#e11d48;color:white;border:none;
-            border-radius:8px;font-size:16px;cursor:pointer;
+        .top-nav {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .top-nav h3 { color: #166534; margin: 0; }
+        .logout-btn-small {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .dashboard-wrapper {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            display: grid;
+            gap: 20px;
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #166534, #16a34a);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .avatar {
+            width: 70px;
+            height: 70px;
+            background: white;
+            color: #166534;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid #16a34a;
+        }
+        .info-card .label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .info-card .value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111;
+            margin-top: 5px;
+            word-break: break-all;
         }
     </style>
 </head>
 <body>
-    <div class="dash">
-        <h1>Welcome to Dashboard 🎉</h1>
-        <p id="welcomeMsg">Loading...</p>
-        <div class="info" id="studentInfo"></div>
-        <button onclick="logout()">Logout</button>
+    <div class="top-nav">
+        <h3>Kisii University Portal</h3>
+        <button class="logout-btn-small" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="dashboard-wrapper">
+        <div class="welcome-card">
+            <div class="avatar" id="avatar">OM</div>
+            <div>
+                <h2 style="margin:0; color:white; text-align:left;">Welcome to Dashboard 🎉</h2>
+                <p style="margin:5px 0 0 0; opacity:0.9;" id="helloText">Hello, Obwanda Martin!</p>
+            </div>
+        </div>
+
+        <div class="info-grid" id="studentDetails">
+            <!-- JS will fill here -->
+        </div>
     </div>
 
     <script>
-        
-        let data = localStorage.getItem('student');
-        
-        if(!data){
+        let student = JSON.parse(localStorage.getItem('student'));
+
+        if(student){
+            document.getElementById('helloText').textContent = `Hello, ${student.name}!`;
+            document.getElementById('avatar').textContent = student.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
             
-            alert("Please register first!");
-            window.location.href = "register.html";
-        } else {
-            let student = JSON.parse(data);
-            document.getElementById('welcomeMsg').innerHTML = `Hello, <strong>${student.name}</strong>!`;
-            document.getElementById('studentInfo').innerHTML = `
-                <p><strong>Reg No:</strong> ${student.regNo}</p>
-                <p><strong>Email:</strong> ${student.email}</p>
-                <p><strong>Course:</strong> ${student.course}</p>
-                <p><strong>Year:</strong> ${student.year}</p>
+            document.getElementById('studentDetails').innerHTML = `
+                <div class="info-card"><div class="label">Registration No</div><div class="value">${student.regNo}</div></div>
+                <div class="info-card"><div class="label">Email Address</div><div class="value">${student.email}</div></div>
+                <div class="info-card"><div class="label">Course</div><div class="value">${student.course}</div></div>
+                <div class="info-card"><div class="label">Year of Study</div><div class="value">${student.year}</div></div>
             `;
+        } else {
+            window.location.href = "LogIn.html";
         }
 
         function logout(){
             localStorage.removeItem('student');
-            window.location.href = "register.html";
+            window.location.href = "LogIn.html";
         }
     </script>
 </body>
